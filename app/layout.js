@@ -3,6 +3,7 @@ import { FaRegCopyright } from "react-icons/fa";
 import "./globals.css";
 import Header from '@/components/header';
 import { ClerkProvider } from '@clerk/nextjs';
+import CreateEventDrawer from '@/components/create-events';
 
 export const metadata = {
   title: "AssemblrR",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
             <p className="flex items-center justify-center space-x-2 gap-2"><FaRegCopyright/>Copyright 2024 AssemblrR</p>
           </div>
         </footer>
+        <CreateEventDrawer/>
       </body>
     </html>
     </ClerkProvider>
