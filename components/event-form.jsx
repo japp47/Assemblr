@@ -1,5 +1,4 @@
-"use client";
-
+// "use client";
 import { eventSchema } from '@/app/lib/validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
@@ -10,23 +9,27 @@ import { Button } from './ui/button'
 import useFetch from '@/hooks/use-fetch'
 import { createEvent } from '@/actions/events'
 import { useRouter } from 'next/navigation'
+import { Textarea } from "@/components/ui/textarea";
 
-const EventForm= ({onSubmitForm}) => {
+const EventForm= ({onSubmitForm, initialData={}}) => {
     const router = useRouter();
 
     const {register, handleSubmit, formState: {errors}, control} = useForm({
         resolver: zodResolver(eventSchema),
         defaultValues: {
-            duration: 30,
-            isPrivate: true,
+            title: initialData.title || "",
+            description: initialData.description || "",
+            duration: initialData.duration || 30,
+            isPrivate: initialData.isPrivate ?? true,
         }
     })
     const {loading, error, fn: fnCreateEvent} = useFetch(createEvent)
     const onSubmit = async(data) => {
+        console.log(data);
         await fnCreateEvent(data)
         if(!loading && !error) {
             onSubmitForm();
-        }
+        } else if(error) console.error(error);
         router.refresh();
     }
   return (
@@ -44,7 +47,7 @@ const EventForm= ({onSubmitForm}) => {
                 Event Description
             </label>
 
-            <Input id="description" {...register("description")} className="mt-1"/>
+            <Textarea {...register("description")} id="description" className="mt-1"/>
             {errors.description && <p className="text-red-500">{errors.description.message}</p>}
         </div>
         <div>
@@ -87,7 +90,7 @@ const EventForm= ({onSubmitForm}) => {
             {errors.isPrivate && <p className="text-red-500">{errors.isPrivate.message}</p>}
         </div>
 
-        {error && <p className="text-red-500">{error.message}</p>}
+        {error && <p className="text-red-500 text-xs mt-1">{error.message}</p>}
         <Button type="submit" disabled={loading}>
             {loading ? "Submitting...": "Create Event"}</Button>
     </form>
