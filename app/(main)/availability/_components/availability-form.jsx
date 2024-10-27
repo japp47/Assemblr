@@ -7,15 +7,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { timeSlots } from '../data';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import useFetch from '@/hooks/use-fetch';
+import { updateAvailability } from '@/actions/availability';
 
 const AvailabilityForm = ({initialData}) => {
-    const {register, handleSubmit, control, setValue, watch} = useForm({
+    const {register, handleSubmit, control, setValue, watch, formState: {errors}} = useForm({
         resolver: zodResolver(availabilitySchema),
         defaultValues: {...initialData},
     });
 
+    const {fn: fnUpdateAvailability, loading, error} = useFetch(updateAvailability);
+
+    const onSubmit = async(data) => {
+        await fnUpdateAvailability(data);
+    }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
         {[
             "monday",
             "tuesday",
@@ -95,12 +105,33 @@ const AvailabilityForm = ({initialData}) => {
                                         );
                                     }}
                                 />
+
+                                {errors[day]?.endTime && (
+                                    <span className="text-red-500 text-sm ml-2">{errors[day]?.endTime.message}</span>
+                                )}
                             </>
                         )}
                     </div>
                 )
             })
         }
+        <div className='flex items-center space-x-4'>
+            <span>Minimum gap before booking (in minutes):</span>
+            <Input
+                type="number"
+                {...register("timeGap", {
+                    valueAsNumber: true,
+                })}
+                className="w-32"
+            />
+            {errors.timeGap && (
+                <span className="text-red-500 text-sm ml-2">{errors?.timeGap.message}</span>
+            )}
+        </div>
+        {error && <div className='text-red-500 text-sm'>{error?.message}</div>}
+        <Button type="submit" className="mt-5" disabled={loading}>
+            {loading? "Updating...": "Update Availability"}
+        </Button>
     </form>
   )
 }
