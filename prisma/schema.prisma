@@ -67,7 +67,7 @@ model Availability {
 }
 model DaysAvailable {
   id          String   @id @default(uuid())
-  availabilityId String @unique
+  availabilityId String
   day         DaysOfWeek
   startTime   DateTime
   endTime     DateTime

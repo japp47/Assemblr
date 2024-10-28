@@ -14,6 +14,13 @@ body {
     @apply font-extrabold bg-gradient-to-br from-purple-700 to-purple-400 bg-clip-text tracking-tighter text-transparent pb-4 pr-2
 
   }
+  .no-scrollbar::-webkit-scrollbar{
+    display: none;
+  }
+  .no-scrollbar{
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }
 
 @layer base {

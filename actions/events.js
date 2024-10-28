@@ -81,3 +81,25 @@ export async function deleteEvent(eventId) {
     });
     return {success: true};
 }
+
+export async function fetchEventDetails(username, eventId) {
+    const event = await db.event.findFirst({
+        where: {
+            id: eventId,
+            user: {
+                username: username
+            },
+        },
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    email: true,
+                    username: true,
+                    imageUrl: true
+                }
+            }
+        }
+    })
+    return event  
+}
