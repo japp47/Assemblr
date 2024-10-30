@@ -38,7 +38,13 @@ const Dashboard = () => {
   const { loading: loadingUpdates, data: upcomingMeetings, fn: fnGetLatestUpdates } = useFetch(getLatestUpdates);
 
   useEffect(() => {
-    (async () => await fnGetLatestUpdates())()
+    (async () => {
+      try {
+        await fnGetLatestUpdates();
+    } catch (error) {
+        console.error("Error fetching latest updates:", error);
+    }
+    })()
   }, [])
 
   const onSubmit = async (data) => {

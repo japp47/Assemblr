@@ -8,7 +8,7 @@ export async function getLatestUpdates() {
     if(!userId)
         throw new Error("Unauthorized");
 
-    const user = db.user.findUnique({
+    const user = await db.user.findUnique({
         where: {
             clerkUserId: userId
         }
@@ -18,7 +18,7 @@ export async function getLatestUpdates() {
     if(!user)
         throw new Error("User not found");
 
-    const now = new Date();;
+    const now = new Date();
 
     const upcomingMeetings = await db.booking.findMany({
         where: {
