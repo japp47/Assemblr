@@ -26,8 +26,8 @@ const UserPage = async ({ params }) => {
                 </Avatar>
             <h1 className="text-4xl font-bold text-gray-800 mb-2 tracking-wide">{user.name}</h1>
             <p className="text-gray-600 max-w-md leading-relaxed">
-            Welcome to AssemblR! Explore <span className="font-semibold">{user.name}</span>'s public events and book a time to connect.
-            </p>
+  Welcome to AssemblR! Explore <span className="font-semibold">{user.name}&apos;s</span> public events and book a time to connect.
+</p>
         </div>
 
             {user.events.length === 0 ? (
